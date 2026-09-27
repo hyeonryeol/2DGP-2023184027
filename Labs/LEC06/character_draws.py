@@ -3,8 +3,12 @@ open_canvas(800, 600)
 
 character = load_image('character.png')
 
+cx, cy = 400, 300   
+r = 200             
+angle = 0
+
 def draw_character():
-    character.draw(400, 300)
+    character.draw(cx, cy)
 
 def move_circle():
     print("Circle")
