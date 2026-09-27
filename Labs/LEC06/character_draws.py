@@ -1,4 +1,5 @@
 from pico2d import *
+import math
 open_canvas(800, 600)
 
 character = load_image('character.png')
@@ -11,10 +12,20 @@ def draw_character():
     character.draw(cx, cy)
 
 def move_circle():
+    global angle
     print("Circle")
     clear_canvas()
-    character.draw(400, 300)
+
+    x = cx + r * math.cos(angle)
+    y = cy + r * math.sin(angle)
+    character.draw(x, y)
+
     update_canvas()
+
+    angle += 0.05
+    
+    delay(0.01)
+
     pass
 
 def move_rectangle():
