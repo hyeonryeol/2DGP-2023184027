@@ -40,9 +40,7 @@ def move_triangle():
 while True:
     while(2 * math.pi >= angle):
         move_circle()
-        if angle >= 2 * math.pi:
-            angle = 0
-            break
+    angle = 0
     move_rectangle()
     move_triangle()
     pass
