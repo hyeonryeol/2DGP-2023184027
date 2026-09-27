@@ -21,7 +21,7 @@ def move_circle():
     character.draw(x, y)
 
     update_canvas()
-
+    
     angle += 0.05
     
     delay(0.01)
@@ -38,7 +38,11 @@ def move_triangle():
 
 
 while True:
-    move_circle()
+    while(2 * math.pi >= angle):
+        move_circle()
+        if angle >= 2 * math.pi:
+            angle = 0
+            break
     move_rectangle()
     move_triangle()
     pass
