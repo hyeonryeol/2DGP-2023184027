@@ -8,6 +8,7 @@ cx, cy = 400, 300   # 원운동 중심
 r = 200             # 원운동 반지름
 frame_delay = 0.01  # 한 프레임마다 기다리는 시간
 
+# 화면을 지우고 (x, y)에 캐릭터를 한 프레임 그리기
 def draw_character(x, y):
     clear_canvas()
     character.draw(x, y)
@@ -60,6 +61,7 @@ def move_triangle_left():
         y = 550 + (50 - 550) * i / 100
         draw_character(x, y)
 
+# 중심 (cx, cy), 반지름 r인 원을 5도씩 한 바퀴 돌기
 def move_circle():
     print("Circle")
     for deg in range(0, 360, 5):
