@@ -51,6 +51,10 @@ def move_triangle_right():
     pass
 def move_triangle_left():
     print("Triangle Left")
+    for i in range(0, 100):
+        x = 400 + (50 - 400) * i / 100
+        y = 550 + (50 - 550) * i / 100
+        draw_character(x, y)
     pass
 
 def move_circle():
