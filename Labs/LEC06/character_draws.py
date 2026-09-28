@@ -70,6 +70,7 @@ def move_circle():
         y = cy + r * math.sin(angle)
         draw_character(x, y)
 
+# 사각형 네 변을 차례로 돌기
 def move_rectangle():
     print("Rectangle")
     move_top()
@@ -77,6 +78,7 @@ def move_rectangle():
     move_bottom()
     move_left()
 
+# 삼각형 세 변을 차례로 돌기
 def move_triangle():
     print("Triangle")
     move_triangle_bottom()
