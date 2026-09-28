@@ -27,12 +27,10 @@ def move_bottom():
     print("Bottom")
     for x in range(750, 50, -5):
         draw_character(x, 50)
-    pass
 def move_left():
     print("Left")
     for y in range(50, 550, 5):
         draw_character(50, y)
-    pass
 def move_triangle_bottom():
     print("Triangle Bottom")
     for x in range(50, 750, 5):
@@ -68,7 +66,6 @@ def move_rectangle():
     move_right()
     move_bottom()
     move_left()
-    pass
 
 def move_triangle():
     print("Triangle")
