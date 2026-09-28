@@ -5,11 +5,23 @@ open_canvas(800, 600)
 character = load_image('character.png')
 
 cx, cy = 400, 300   
-r = 200             
-angle = 0
+r = 200
+def draw_character():
+    character.draw(cx, cy)
+
+   
+
+def draw_character(x):
+    clear_canvas()
+    character.draw(x, 550)
+    update_canvas()
+    delay(0.05)
+    
 def move_top():
     print("Top")
-    pass
+    for x in range(50, 750, 5):
+        draw_character(x)
+
 def move_right():
     print("Right")
     pass
@@ -19,25 +31,18 @@ def move_bottom():
 def move_left():
     print("Left")
     pass
-def draw_character():
-    character.draw(cx, cy)
+
 
 def move_circle():
-    global angle
     print("Circle")
-    clear_canvas()
-
-    x = cx + r * math.cos(angle)
-    y = cy + r * math.sin(angle)
-    character.draw(x, y)
-
-    update_canvas()
-    
-    angle += 0.05
-    
-    delay(0.01)
-
-    pass
+    for deg in range(0, 360, 5):
+        angle = math.radians(deg)
+        x = cx + r * math.cos(angle)
+        y = cy + r * math.sin(angle)
+        clear_canvas()
+        character.draw(x, y)
+        update_canvas()
+        delay(0.05)
 
 def move_rectangle():
     print("Rectangle")
@@ -53,9 +58,7 @@ def move_triangle():
 
 
 while True:
-    while(2 * math.pi >= angle):
-        move_circle()
-    angle = 0
+    move_circle()
     move_rectangle()
     move_triangle()
     pass
