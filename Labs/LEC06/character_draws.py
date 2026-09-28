@@ -7,7 +7,18 @@ character = load_image('character.png')
 cx, cy = 400, 300   
 r = 200             
 angle = 0
-
+def move_top():
+    print("Top")
+    pass
+def move_right():
+    print("Right")
+    pass
+def move_bottom():
+    print("Bottom")
+    pass
+def move_left():
+    print("Left")
+    pass
 def draw_character():
     character.draw(cx, cy)
 
@@ -30,6 +41,10 @@ def move_circle():
 
 def move_rectangle():
     print("Rectangle")
+    move_top()
+    move_right()
+    move_bottom()
+    move_left()
     pass
 
 def move_triangle():
