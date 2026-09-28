@@ -38,11 +38,13 @@ def move_left():
     for y in range(50, 550, 5):
         draw_character(50, y)
 
+# 삼각형 아래 변: 왼쪽 아래에서 오른쪽 아래로
 def move_triangle_bottom():
     print("Triangle Bottom")
     for x in range(50, 750, 5):
         draw_character(x, 50)
 
+# 삼각형 오른쪽 변: 오른쪽 아래에서 꼭짓점으로
 def move_triangle_right():
     print("Triangle Right")
     for i in range(0, 100):
@@ -50,6 +52,7 @@ def move_triangle_right():
         y = 50 + (550 - 50) * i / 100
         draw_character(x, y)
 
+# 삼각형 왼쪽 변: 꼭짓점에서 왼쪽 아래로
 def move_triangle_left():
     print("Triangle Left")
     for i in range(0, 100):
