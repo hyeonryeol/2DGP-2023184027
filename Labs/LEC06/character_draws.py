@@ -86,6 +86,7 @@ def move_triangle():
     move_triangle_left()
 
 
+# 원 -> 사각형 -> 삼각형 운동을 무한 반복
 while True:
     move_circle()
     move_rectangle()
