@@ -35,21 +35,18 @@ def move_triangle_bottom():
     print("Triangle Bottom")
     for x in range(50, 750, 5):
         draw_character(x, 50)
-    pass
 def move_triangle_right():
     print("Triangle Right")
     for i in range(0, 100):
         x = 750 + (400 - 750) * i / 100
         y = 50 + (550 - 50) * i / 100
         draw_character(x, y)
-    pass
 def move_triangle_left():
     print("Triangle Left")
     for i in range(0, 100):
         x = 400 + (50 - 400) * i / 100
         y = 550 + (50 - 550) * i / 100
         draw_character(x, y)
-    pass
 
 def move_circle():
     print("Circle")
@@ -72,7 +69,6 @@ def move_triangle():
     move_triangle_bottom()
     move_triangle_right()
     move_triangle_left()
-    pass
 
 
 while True:
