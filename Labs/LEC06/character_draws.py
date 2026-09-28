@@ -14,21 +14,25 @@ def draw_character(x, y):
     update_canvas()
     delay(frame_delay)
 
+# 사각형 위 변: 왼쪽 위에서 오른쪽 위로
 def move_top():
     print("Top")
     for x in range(50, 750, 5):
         draw_character(x, 550)
 
+# 사각형 오른쪽 변: 오른쪽 위에서 오른쪽 아래로
 def move_right():
     print("Right")
     for y in range(550, 50, -5):
         draw_character(750, y)
 
+# 사각형 아래 변: 오른쪽 아래에서 왼쪽 아래로
 def move_bottom():
     print("Bottom")
     for x in range(750, 50, -5):
         draw_character(x, 50)
 
+# 사각형 왼쪽 변: 왼쪽 아래에서 왼쪽 위로
 def move_left():
     print("Left")
     for y in range(50, 550, 5):
