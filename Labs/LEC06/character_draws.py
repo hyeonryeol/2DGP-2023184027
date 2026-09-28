@@ -4,9 +4,9 @@ open_canvas(800, 600)
 
 character = load_image('character.png')
 
-cx, cy = 400, 300
-r = 200
-frame_delay = 0.01
+cx, cy = 400, 300   # 원운동 중심
+r = 200             # 원운동 반지름
+frame_delay = 0.01  # 한 프레임마다 기다리는 시간
 
 def draw_character(x, y):
     clear_canvas()
