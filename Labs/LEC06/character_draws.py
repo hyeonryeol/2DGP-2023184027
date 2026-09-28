@@ -6,12 +6,13 @@ character = load_image('character.png')
 
 cx, cy = 400, 300
 r = 200
+frame_delay = 0.01
 
 def draw_character(x, y):
     clear_canvas()
     character.draw(x, y)
     update_canvas()
-    delay(0.01)
+    delay(frame_delay)
 
 def move_top():
     print("Top")
