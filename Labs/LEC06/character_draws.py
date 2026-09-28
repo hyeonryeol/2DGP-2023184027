@@ -6,10 +6,6 @@ character = load_image('character.png')
 
 cx, cy = 400, 300   
 r = 200
-def draw_character():
-    character.draw(cx, cy)
-
-   
 
 def draw_character(x, y):
     clear_canvas()
