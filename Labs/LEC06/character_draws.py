@@ -29,6 +29,8 @@ def move_right():
 
 def move_bottom():
     print("Bottom")
+    for x in range(750, 50, -5):
+        draw_character(x, 50)
     pass
 def move_left():
     print("Left")
@@ -41,10 +43,8 @@ def move_circle():
         angle = math.radians(deg)
         x = cx + r * math.cos(angle)
         y = cy + r * math.sin(angle)
-       
         draw_character(x, y)
       
-        delay(0.05)
 
 def move_rectangle():
     print("Rectangle")
