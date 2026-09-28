@@ -4,7 +4,7 @@ open_canvas(800, 600)
 
 character = load_image('character.png')
 
-cx, cy = 400, 300   
+cx, cy = 400, 300
 r = 200
 
 def draw_character(x, y):
@@ -60,7 +60,7 @@ def move_circle():
         x = cx + r * math.cos(angle)
         y = cy + r * math.sin(angle)
         draw_character(x, y)
-      
+
 
 def move_rectangle():
     print("Rectangle")
