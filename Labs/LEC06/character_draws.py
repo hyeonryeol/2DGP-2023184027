@@ -11,20 +11,22 @@ def draw_character():
 
    
 
-def draw_character(x):
+def draw_character(x, y):
     clear_canvas()
-    character.draw(x, 550)
+    character.draw(x, y)
     update_canvas()
     delay(0.05)
-    
+
 def move_top():
     print("Top")
     for x in range(50, 750, 5):
-        draw_character(x)
+        draw_character(x, 550)
 
 def move_right():
     print("Right")
-    pass
+    for y in range(550, 50, -5):
+        draw_character(750, y)
+
 def move_bottom():
     print("Bottom")
     pass
@@ -39,9 +41,9 @@ def move_circle():
         angle = math.radians(deg)
         x = cx + r * math.cos(angle)
         y = cy + r * math.sin(angle)
-        clear_canvas()
-        character.draw(x, y)
-        update_canvas()
+       
+        draw_character(x, y)
+      
         delay(0.05)
 
 def move_rectangle():
