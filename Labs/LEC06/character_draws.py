@@ -37,8 +37,10 @@ def move_left():
     for y in range(50, 550, 5):
         draw_character(50, y)
     pass
-def move_triangle_top():
-    print("Triangle Top")
+def move_triangle_bottom():
+    print("Triangle Bottom")
+    for x in range(50, 750, 5):
+        draw_character(x, 50)
     pass
 def move_triangle_right():
     print("Triangle Right")
@@ -66,7 +68,7 @@ def move_rectangle():
 
 def move_triangle():
     print("Triangle")
-    move_triangle_top()
+    move_triangle_bottom()
     move_triangle_right()
     move_triangle_left()
     pass
