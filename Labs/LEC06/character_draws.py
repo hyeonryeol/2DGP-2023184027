@@ -27,20 +27,24 @@ def move_bottom():
     print("Bottom")
     for x in range(750, 50, -5):
         draw_character(x, 50)
+
 def move_left():
     print("Left")
     for y in range(50, 550, 5):
         draw_character(50, y)
+
 def move_triangle_bottom():
     print("Triangle Bottom")
     for x in range(50, 750, 5):
         draw_character(x, 50)
+
 def move_triangle_right():
     print("Triangle Right")
     for i in range(0, 100):
         x = 750 + (400 - 750) * i / 100
         y = 50 + (550 - 50) * i / 100
         draw_character(x, y)
+
 def move_triangle_left():
     print("Triangle Left")
     for i in range(0, 100):
@@ -55,7 +59,6 @@ def move_circle():
         x = cx + r * math.cos(angle)
         y = cy + r * math.sin(angle)
         draw_character(x, y)
-
 
 def move_rectangle():
     print("Rectangle")
