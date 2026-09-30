@@ -36,14 +36,15 @@ def draw_frame(frame):
     sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
 
 
-anim = 1
-frame = 0
+# 모든 애니메이션을 차례로, 각각 5회씩 재생하고 마지막 다음엔 처음부터 다시 (무한 반복)
 while True:
-    name, frames = animations[anim]
-    clear_canvas()
-    draw_frame(frames[frame])
-    update_canvas()
-    frame = (frame + 1) % len(frames)
-    delay(0.15)
+    for name, frames in animations:
+        print(name)
+        for repeat in range(5):
+            for frame in frames:
+                clear_canvas()
+                draw_frame(frame)
+                update_canvas()
+                delay(0.1)
 
 close_canvas()
