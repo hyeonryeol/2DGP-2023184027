@@ -17,9 +17,12 @@ def draw_frame(frame, x, y):
     sonic.clip_draw(left, bottom, w, h, x, y)
 
 
-clear_canvas()
-draw_frame(idle_frames[0], 400, 300)
-update_canvas()
-delay(3)
+frame = 0
+while True:
+    clear_canvas()
+    draw_frame(idle_frames[frame], 400, 300)
+    update_canvas()
+    frame = (frame + 1) % len(idle_frames)
+    delay(0.15)
 
 close_canvas()
