@@ -86,6 +86,16 @@ def update():
             frame_index = 0
 
 
+# 창 닫기 버튼이나 ESC 키를 누르면 종료
+def handle_events():
+    global running
+    for event in get_events():
+        if event.type == SDL_QUIT:
+            running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
+
+
 def draw():
     clear_canvas()
     name, frame_time, frames = animations[anim_index]
@@ -93,8 +103,10 @@ def draw():
     update_canvas()
 
 
+running = True
 print(animations[anim_index][0])
-while True:
+while running:
+    handle_events()
     update()
     draw()
     delay(0.01)
