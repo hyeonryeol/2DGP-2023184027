@@ -1,4 +1,6 @@
 from pico2d import *
+import pico2d
+import os
 
 SCALE = 10      # 캐릭터 확대 배율 (키 38픽셀 -> 380픽셀, 화면 높이 600의 절반 이상)
 
@@ -6,6 +8,8 @@ open_canvas(800, 600)
 
 sonic = load_image('sonic-sprite.png')
 grass = load_image('grass.png')
+# 화면에 글자를 쓸 글꼴 (pico2d에 들어 있는 글꼴 파일 사용)
+font = load_font(os.path.join(os.path.dirname(pico2d.__file__), 'data', 'ConsolaMalgun.ttf'), 22)
 
 # 애니메이션 목록: (이름, 한 프레임 보여 주는 시간(초), 프레임 목록)
 # 프레임 위치는 (left, top, width, height)
@@ -97,11 +101,24 @@ def handle_events():
             running = False
 
 
+# 화면 위쪽에 지금 재생 중인 애니메이션 정보를 쓴다
+def draw_info():
+    name, frame_time, frames = animations[anim_index]
+    left, top, w, h = frames[frame_index][:4]
+    if paused:
+        state = 'pause'
+    else:
+        state = 'loop %d/%d' % (repeat + 1, REPEAT_COUNT)
+    font.draw(20, 575, '[%d/%d] %s   %s' % (anim_index + 1, len(animations), name, state), (20, 20, 60))
+    font.draw(20, 545, 'frame %d/%d   size %dx%d' % (frame_index + 1, len(frames), w, h), (20, 20, 60))
+
+
 def draw():
     clear_canvas()
     grass.draw(400, GROUND_Y - 25)      # 잔디 윗부분이 발밑에 오도록
     name, frame_time, frames = animations[anim_index]
     draw_frame(frames[frame_index])
+    draw_info()
     update_canvas()
 
 
