@@ -77,9 +77,12 @@ def update():
         return
 
     name, frame_time, frames = animations[anim_index]
-    if get_time() - last_frame_time < frame_time:
+    now = get_time()
+    if now - last_frame_time < frame_time:
         return
-    last_frame_time += frame_time
+    # 창을 끌고 있는 등 잠시 멈췄다 풀리면 밀린 프레임을 한꺼번에 넘기지 않도록
+    # 밀린 시간은 버리고 한 프레임만 넘긴다
+    last_frame_time = max(last_frame_time + frame_time, now - frame_time)
 
     frame_index += 1
     if frame_index == len(frames):      # 한 바퀴 끝
