@@ -1,9 +1,14 @@
+# Drill #8 애니메이션 뷰어
+# 소닉 스프라이트 시트의 애니메이션 5종(Idle, Walk, Run, Spin, Twirl)을 화면 가운데에서
+# 각각 5회 반복 -> 1초 정지 -> 다음 애니메이션 순서로 무한 반복 재생한다.
 from pico2d import *
 import pico2d
 import os
 
 CANVAS_W, CANVAS_H = 800, 600
-SCALE = 10      # 캐릭터 확대 배율 (키 38픽셀 -> 380픽셀, 화면 높이 600의 절반 이상)
+SCALE = 10          # 캐릭터 확대 배율 (키 38픽셀 -> 380픽셀, 화면 높이 600의 절반 이상)
+REPEAT_COUNT = 5    # 애니메이션 하나를 반복하는 횟수
+PAUSE_TIME = 1.0    # 반복이 끝난 뒤 멈춰 있는 시간(초)
 
 open_canvas(CANVAS_W, CANVAS_H)
 
@@ -44,9 +49,6 @@ def draw_frame(frame):
     y = GROUND_Y + h * SCALE / 2
     sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
 
-
-REPEAT_COUNT = 5    # 애니메이션 하나를 반복하는 횟수
-PAUSE_TIME = 1.0    # 반복이 끝난 뒤 멈춰 있는 시간(초)
 
 anim_index = 0      # 지금 재생 중인 애니메이션 번호
 frame_index = 0     # 그 애니메이션의 몇 번째 프레임인지
