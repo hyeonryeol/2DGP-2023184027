@@ -2,9 +2,10 @@ from pico2d import *
 import pico2d
 import os
 
+CANVAS_W, CANVAS_H = 800, 600
 SCALE = 10      # 캐릭터 확대 배율 (키 38픽셀 -> 380픽셀, 화면 높이 600의 절반 이상)
 
-open_canvas(800, 600)
+open_canvas(CANVAS_W, CANVAS_H)
 
 sonic = load_image('sonic-sprite.png')
 grass = load_image('grass.png')
@@ -27,7 +28,7 @@ animations = [
 ]
 
 
-GROUND_X, GROUND_Y = 400, 100    # 캐릭터 발밑(땅) 위치
+GROUND_X, GROUND_Y = CANVAS_W // 2, 100    # 캐릭터 발밑(땅) 위치 - 화면 가운데
 
 
 # 프레임 하나를 SCALE배 확대해서 그린다.
@@ -109,13 +110,13 @@ def draw_info():
         state = 'pause'
     else:
         state = 'loop %d/%d' % (repeat + 1, REPEAT_COUNT)
-    font.draw(20, 575, '[%d/%d] %s   %s' % (anim_index + 1, len(animations), name, state), (20, 20, 60))
-    font.draw(20, 545, 'frame %d/%d   size %dx%d' % (frame_index + 1, len(frames), w, h), (20, 20, 60))
+    font.draw(20, CANVAS_H - 25, '[%d/%d] %s   %s' % (anim_index + 1, len(animations), name, state), (20, 20, 60))
+    font.draw(20, CANVAS_H - 55, 'frame %d/%d   size %dx%d' % (frame_index + 1, len(frames), w, h), (20, 20, 60))
 
 
 def draw():
     clear_canvas()
-    grass.draw(400, GROUND_Y - 25)      # 잔디 윗부분이 발밑에 오도록
+    grass.draw(CANVAS_W // 2, GROUND_Y - 25)      # 잔디 윗부분이 발밑에 오도록
     name, frame_time, frames = animations[anim_index]
     draw_frame(frames[frame_index])
     draw_info()
