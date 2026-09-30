@@ -46,5 +46,6 @@ while True:
                 draw_frame(frame)
                 update_canvas()
                 delay(0.1)
+        delay(1)    # 5회 반복이 끝나면 마지막 프레임을 보여 준 채로 1초 정지
 
 close_canvas()
