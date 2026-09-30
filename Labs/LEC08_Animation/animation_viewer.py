@@ -39,16 +39,64 @@ def draw_frame(frame):
     sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
 
 
-# 모든 애니메이션을 차례로, 각각 5회씩 재생하고 마지막 다음엔 처음부터 다시 (무한 반복)
+REPEAT_COUNT = 5    # 애니메이션 하나를 반복하는 횟수
+PAUSE_TIME = 1.0    # 반복이 끝난 뒤 멈춰 있는 시간(초)
+
+anim_index = 0      # 지금 재생 중인 애니메이션 번호
+frame_index = 0     # 그 애니메이션의 몇 번째 프레임인지
+repeat = 0          # 지금까지 반복한 횟수
+paused = False      # 5회 반복 뒤 1초 정지 중인지
+pause_start = 0.0
+last_frame_time = get_time()
+
+
+# 다음 애니메이션으로 넘어간다. 마지막 다음은 다시 처음 (무한 반복)
+def start_next_animation():
+    global anim_index, frame_index, repeat, paused, last_frame_time
+    anim_index = (anim_index + 1) % len(animations)
+    frame_index = 0
+    repeat = 0
+    paused = False
+    last_frame_time = get_time()
+    print(animations[anim_index][0])
+
+
+# 시간을 재서 프레임을 넘긴다.
+# 프레임 수가 애니메이션마다 다르므로 항상 지금 애니메이션의 len(frames)로 한 바퀴를 판단한다.
+def update():
+    global frame_index, repeat, paused, pause_start, last_frame_time
+    if paused:
+        if get_time() - pause_start >= PAUSE_TIME:
+            start_next_animation()
+        return
+
+    name, frame_time, frames = animations[anim_index]
+    if get_time() - last_frame_time < frame_time:
+        return
+    last_frame_time += frame_time
+
+    frame_index += 1
+    if frame_index == len(frames):      # 한 바퀴 끝
+        repeat += 1
+        if repeat == REPEAT_COUNT:
+            frame_index -= 1            # 정지하는 동안 마지막 프레임을 보여 준다
+            paused = True
+            pause_start = get_time()
+        else:
+            frame_index = 0
+
+
+def draw():
+    clear_canvas()
+    name, frame_time, frames = animations[anim_index]
+    draw_frame(frames[frame_index])
+    update_canvas()
+
+
+print(animations[anim_index][0])
 while True:
-    for name, frame_time, frames in animations:
-        print(name)
-        for repeat in range(5):
-            for frame in frames:
-                clear_canvas()
-                draw_frame(frame)
-                update_canvas()
-                delay(frame_time)
-        delay(1)    # 5회 반복이 끝나면 마지막 프레임을 보여 준 채로 1초 정지
+    update()
+    draw()
+    delay(0.01)
 
 close_canvas()
