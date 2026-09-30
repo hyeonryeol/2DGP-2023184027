@@ -16,11 +16,18 @@ animations = [
 ]
 
 
-# 프레임 하나를 SCALE배 확대해서 (x, y)에 그린다.
+GROUND_X, GROUND_Y = 400, 100    # 캐릭터 발밑(땅) 위치
+
+
+# 프레임 하나를 SCALE배 확대해서 그린다.
+# 프레임마다 크기가 달라서 중심에 맞춰 그리면 캐릭터가 위아래로 흔들리므로,
+# 프레임의 아래쪽 가운데(발밑)를 땅 위치 (GROUND_X, GROUND_Y)에 맞춘다.
 # clip_draw는 시트 왼쪽 아래 기준이므로 top을 bottom으로 바꿔 준다.
-def draw_frame(frame, x, y):
+def draw_frame(frame):
     left, top, w, h = frame
     bottom = sonic.h - top - h
+    x = GROUND_X
+    y = GROUND_Y + h * SCALE / 2
     sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
 
 
@@ -29,7 +36,7 @@ frame = 0
 while True:
     name, frames = animations[anim]
     clear_canvas()
-    draw_frame(frames[frame], 400, 300)
+    draw_frame(frames[frame])
     update_canvas()
     frame = (frame + 1) % len(frames)
     delay(0.15)
