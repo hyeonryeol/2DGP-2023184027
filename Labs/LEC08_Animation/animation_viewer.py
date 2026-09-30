@@ -5,6 +5,7 @@ SCALE = 10      # 캐릭터 확대 배율 (키 38픽셀 -> 380픽셀, 화면 높
 open_canvas(800, 600)
 
 sonic = load_image('sonic-sprite.png')
+grass = load_image('grass.png')
 
 # 애니메이션 목록: (이름, 한 프레임 보여 주는 시간(초), 프레임 목록)
 # 프레임 위치는 (left, top, width, height)
@@ -98,6 +99,7 @@ def handle_events():
 
 def draw():
     clear_canvas()
+    grass.draw(400, GROUND_Y - 25)      # 잔디 윗부분이 발밑에 오도록
     name, frame_time, frames = animations[anim_index]
     draw_frame(frames[frame_index])
     update_canvas()
