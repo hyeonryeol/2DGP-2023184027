@@ -1,5 +1,5 @@
 # LEC09 소닉 애니메이션 뷰어 (개발 문서: PRD.md)
-# sonic-sprite.png에 있는 동작 10종(76프레임)을 화면 가운데에서 4배로 순서대로 재생한다.
+# sonic-sprite.png에 있는 동작 10종(76프레임)을 화면 가운데에서 2배로 순서대로 재생한다.
 # 동작마다 5회 반복 -> 마지막 프레임에서 1초 정지 -> 다음 동작, 마지막 동작 뒤에는 처음부터 다시.
 # ESC나 창 닫기 버튼으로 종료한다.
 from pico2d import *
@@ -7,7 +7,7 @@ import pico2d
 import os
 
 CANVAS_W, CANVAS_H = 800, 600
-SCALE = 4                       # 확대 배율
+SCALE = 2                       # 확대 배율
 GROUND_X, GROUND_Y = 400, 200   # 몸 중심선 x, 발 기준선 y
 FRAME_TIME = 0.1                # 프레임 간격(초)
 REPEAT_COUNT = 5                # 동작별 반복 횟수
@@ -54,7 +54,7 @@ pause_start = 0.0               # 정지를 시작한 시각
 last_frame_time = get_time()    # 마지막으로 프레임을 넘긴 시각
 
 
-# 프레임 하나를 4배로 그린다.
+# 프레임 하나를 SCALE배로 그린다.
 # 몸 중심이 GROUND_X에 오도록 dx만큼 옮기고, 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
 def draw_frame(left, w, dx, bottom, h):
     x = GROUND_X + dx * SCALE
