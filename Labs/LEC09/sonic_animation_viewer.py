@@ -29,6 +29,8 @@ def handle_events():
 while running:
     handle_events()
     clear_canvas()
+    # 1번 동작(대기)의 첫 프레임: left=1, bottom=447, 크기 29x39
+    sonic.clip_draw(1, 447, 29, 39, GROUND_X, GROUND_Y)
     update_canvas()
     delay(0.01)
 
