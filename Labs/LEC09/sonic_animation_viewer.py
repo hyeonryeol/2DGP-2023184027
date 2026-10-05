@@ -86,7 +86,8 @@ def handle_events():
 def update():
     global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time, pos_x, facing, last_update_time
     now = get_time()
-    dt = now - last_update_time
+    # 창을 끌어 옮기는 동안처럼 시간이 크게 튀어도 순간 이동하지 않도록, 한 번에 많아야 FRAME_TIME만큼만 움직인다
+    dt = min(now - last_update_time, FRAME_TIME)
     last_update_time = now
     name, frames = ANIMATIONS[anim_index][0], ANIMATIONS[anim_index][3]
 
