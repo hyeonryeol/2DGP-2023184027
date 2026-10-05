@@ -9,4 +9,20 @@ PAUSE_TIME = 1.0                # 동작 사이 정지 시간(초)
 
 open_canvas(CANVAS_W, CANVAS_H)
 
+running = True
+
+
+def handle_events():
+    global running
+    for event in get_events():
+        if event.type == SDL_QUIT:
+            running = False
+
+
+while running:
+    handle_events()
+    clear_canvas()
+    update_canvas()
+    delay(0.01)
+
 close_canvas()
