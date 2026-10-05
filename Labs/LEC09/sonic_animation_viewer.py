@@ -52,12 +52,13 @@ loop_count = 0                  # 지금까지 끝낸 반복 횟수
 paused = False                  # 5회 반복 뒤 정지 중인지
 pause_start = 0.0               # 정지를 시작한 시각
 last_frame_time = get_time()    # 마지막으로 프레임을 넘긴 시각
+pos_x = GROUND_X                # 캐릭터 몸 중심 x (제자리 동작은 화면 가운데)
 
 
 # 프레임 하나를 SCALE배로 그린다.
-# 몸 중심이 GROUND_X에 오도록 dx만큼 옮기고, 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
+# 몸 중심이 pos_x에 오도록 dx만큼 옮기고, 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
 def draw_frame(left, w, dx, bottom, h):
-    x = GROUND_X + dx * SCALE
+    x = pos_x + dx * SCALE
     y = GROUND_Y + h * SCALE / 2
     sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
 
@@ -73,7 +74,7 @@ def handle_events():
 
 # delay()를 쌓아서 재지 않고 실제 경과 시간으로 프레임을 넘긴다
 def update():
-    global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time
+    global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time, pos_x
     now = get_time()
     frames = ANIMATIONS[anim_index][3]
 
@@ -86,6 +87,7 @@ def update():
             frame_index = 0
             loop_count = 0
             last_frame_time = now
+            pos_x = GROUND_X        # 새 동작은 화면 가운데에서 시작한다
         return
 
     if now - last_frame_time >= FRAME_TIME:
