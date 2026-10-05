@@ -14,13 +14,16 @@ open_canvas(CANVAS_W, CANVAS_H)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sonic = load_image(os.path.join(BASE_DIR, 'sonic-sprite.png'))
 
-# 1번 동작(대기): 시트에서 같은 줄이므로 bottom과 h는 같고, 프레임마다 (left, w, dx)만 다르다
+# 동작 목록: (이름, bottom, h, [(left, w, dx), ...])
+# 시트의 한 줄이 한 동작이다. 같은 줄은 bottom과 h가 같고, 프레임마다 (left, w, dx)만 다르다
 # dx: 프레임 가운데와 몸(머리·몸통) 중심의 차이(원본 픽셀). 이만큼 옮겨 그려 몸이 좌우로 흔들리지 않게 한다
-IDLE_BOTTOM, IDLE_H = 447, 39
-IDLE_FRAMES = [(1, 29, 2), (31, 26, 2), (58, 28, 2), (86, 30, 3), (118, 30, 4), (150, 30, 4),
-               (182, 29, 3), (211, 29, 2), (240, 29, 2), (270, 24, 0), (302, 29, -3)]
+ANIMATIONS = [
+    ('대기', 447, 39, [(1, 29, 2), (31, 26, 2), (58, 28, 2), (86, 30, 3), (118, 30, 4), (150, 30, 4),
+                      (182, 29, 3), (211, 29, 2), (240, 29, 2), (270, 24, 0), (302, 29, -3)]),
+]
 
 running = True
+anim_index = 0                  # 지금 재생 중인 동작 번호
 frame_index = 0
 loop_count = 0                  # 지금까지 끝낸 반복 횟수
 paused = False                  # 5회 반복 뒤 정지 중인지
@@ -47,13 +50,16 @@ def handle_events():
 
 # delay()를 쌓아서 재지 않고 실제 경과 시간으로 프레임을 넘긴다
 def update():
-    global frame_index, loop_count, paused, pause_start, last_frame_time
+    global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time
     now = get_time()
+    frames = ANIMATIONS[anim_index][3]
 
-    # 정지 중에는 마지막 프레임을 그대로 두고, PAUSE_TIME이 지나면 처음부터 다시 재생한다
+    # 정지 중에는 마지막 프레임을 그대로 두고, PAUSE_TIME이 지나면 다음 동작으로 넘어간다
+    # 마지막 동작 다음에는 첫 동작으로 돌아간다
     if paused:
         if now - pause_start >= PAUSE_TIME:
             paused = False
+            anim_index = (anim_index + 1) % len(ANIMATIONS)
             frame_index = 0
             loop_count = 0
             last_frame_time = now
@@ -63,16 +69,16 @@ def update():
         frame_index += 1
         last_frame_time += FRAME_TIME
         # 마지막 프레임을 지나면 반복 1회를 끝낸 것이다
-        if frame_index >= len(IDLE_FRAMES):
+        if frame_index >= len(frames):
             loop_count += 1
             if loop_count >= REPEAT_COUNT:
                 # 5회를 채웠으면 마지막 프레임에 머문 채 정지한다
-                frame_index = len(IDLE_FRAMES) - 1
+                frame_index = len(frames) - 1
                 paused = True
                 pause_start = now
                 return
             frame_index = 0
-        # 창을 끄는 동안처럼 시간이 크게 튀었으면 밀린 시간은 버린다 (한 번에 1프레임만)
+        # 창을 끌어 옮기는 동안처럼 시간이 크게 튀었으면 밀린 시간은 버린다 (한 번에 1프레임만)
         if now - last_frame_time >= FRAME_TIME:
             last_frame_time = now
 
@@ -81,8 +87,9 @@ while running:
     handle_events()
     update()
     clear_canvas()
-    left, w, dx = IDLE_FRAMES[frame_index]
-    draw_frame(left, w, dx, IDLE_BOTTOM, IDLE_H)
+    name, bottom, h, frames = ANIMATIONS[anim_index]
+    left, w, dx = frames[frame_index]
+    draw_frame(left, w, dx, bottom, h)
     update_canvas()
     delay(0.01)
 
