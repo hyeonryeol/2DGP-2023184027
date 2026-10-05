@@ -14,7 +14,18 @@ open_canvas(CANVAS_W, CANVAS_H)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sonic = load_image(os.path.join(BASE_DIR, 'sonic-sprite.png'))
 
+# 1번 동작(대기): 시트에서 같은 줄이므로 bottom과 h는 같고, 프레임마다 (left, w)만 다르다
+IDLE_BOTTOM, IDLE_H = 447, 39
+IDLE_FRAMES = [(1, 29), (31, 26), (58, 28), (86, 30), (118, 30), (150, 30),
+               (182, 29), (211, 29), (240, 29), (270, 24), (302, 29)]
+
 running = True
+frame_index = 0
+
+
+# 프레임 하나를 4배로 그린다. 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
+def draw_frame(left, w, bottom, h):
+    sonic.clip_draw(left, bottom, w, h, GROUND_X, GROUND_Y + h * SCALE / 2, w * SCALE, h * SCALE)
 
 
 def handle_events():
@@ -29,10 +40,8 @@ def handle_events():
 while running:
     handle_events()
     clear_canvas()
-    # 1번 동작(대기)의 첫 프레임: left=1, bottom=447, 크기 29x39
-    # clip_draw는 중심 좌표로 그리므로, 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
-    w, h = 29, 39
-    sonic.clip_draw(1, 447, w, h, GROUND_X, GROUND_Y + h * SCALE / 2, w * SCALE, h * SCALE)
+    left, w = IDLE_FRAMES[frame_index]
+    draw_frame(left, w, IDLE_BOTTOM, IDLE_H)
     update_canvas()
     delay(0.01)
 
