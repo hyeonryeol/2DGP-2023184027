@@ -45,6 +45,9 @@ def update():
     if now - last_frame_time >= FRAME_TIME:
         frame_index = (frame_index + 1) % len(IDLE_FRAMES)
         last_frame_time += FRAME_TIME
+        # 창을 끄는 동안처럼 시간이 크게 튀었으면 밀린 시간은 버린다 (한 번에 1프레임만)
+        if now - last_frame_time >= FRAME_TIME:
+            last_frame_time = now
 
 
 while running:
