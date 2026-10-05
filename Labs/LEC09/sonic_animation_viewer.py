@@ -30,7 +30,9 @@ while running:
     handle_events()
     clear_canvas()
     # 1번 동작(대기)의 첫 프레임: left=1, bottom=447, 크기 29x39
-    sonic.clip_draw(1, 447, 29, 39, GROUND_X, GROUND_Y)
+    # clip_draw는 중심 좌표로 그리므로, 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
+    w, h = 29, 39
+    sonic.clip_draw(1, 447, w, h, GROUND_X, GROUND_Y + h * SCALE / 2, w * SCALE, h * SCALE)
     update_canvas()
     delay(0.01)
 
