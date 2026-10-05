@@ -23,6 +23,8 @@ IDLE_FRAMES = [(1, 29, 2), (31, 26, 2), (58, 28, 2), (86, 30, 3), (118, 30, 4), 
 running = True
 frame_index = 0
 loop_count = 0                  # 지금까지 끝낸 반복 횟수
+paused = False                  # 5회 반복 뒤 정지 중인지
+pause_start = 0.0               # 정지를 시작한 시각
 last_frame_time = get_time()    # 마지막으로 프레임을 넘긴 시각
 
 
@@ -45,14 +47,30 @@ def handle_events():
 
 # delay()를 쌓아서 재지 않고 실제 경과 시간으로 프레임을 넘긴다
 def update():
-    global frame_index, loop_count, last_frame_time
+    global frame_index, loop_count, paused, pause_start, last_frame_time
     now = get_time()
+
+    # 정지 중에는 마지막 프레임을 그대로 두고, PAUSE_TIME이 지나면 처음부터 다시 재생한다
+    if paused:
+        if now - pause_start >= PAUSE_TIME:
+            paused = False
+            frame_index = 0
+            loop_count = 0
+            last_frame_time = now
+        return
+
     if now - last_frame_time >= FRAME_TIME:
         frame_index += 1
         last_frame_time += FRAME_TIME
         # 마지막 프레임을 지나면 반복 1회를 끝낸 것이다
         if frame_index >= len(IDLE_FRAMES):
             loop_count += 1
+            if loop_count >= REPEAT_COUNT:
+                # 5회를 채웠으면 마지막 프레임에 머문 채 정지한다
+                frame_index = len(IDLE_FRAMES) - 1
+                paused = True
+                pause_start = now
+                return
             frame_index = 0
         # 창을 끄는 동안처럼 시간이 크게 튀었으면 밀린 시간은 버린다 (한 번에 1프레임만)
         if now - last_frame_time >= FRAME_TIME:
