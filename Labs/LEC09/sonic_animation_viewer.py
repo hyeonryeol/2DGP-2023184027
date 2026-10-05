@@ -115,6 +115,8 @@ while running:
         repeat_text = '반복 %d/%d' % (loop_count + 1, REPEAT_COUNT)
     font.draw(20, CANVAS_H - 25, '[%d/%d] %s   %s' % (anim_index + 1, len(ANIMATIONS), name, repeat_text),
               TEXT_COLOR)
+    # 2줄: 지금 프레임 번호와 원본 크기
+    font.draw(20, CANVAS_H - 55, '프레임 %d/%d   크기 %dx%d' % (frame_index + 1, len(frames), w, h), TEXT_COLOR)
     update_canvas()
     delay(0.01)
 
