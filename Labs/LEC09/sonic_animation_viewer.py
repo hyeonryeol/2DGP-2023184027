@@ -1,3 +1,7 @@
+# LEC09 소닉 애니메이션 뷰어 (개발 문서: PRD.md)
+# sonic-sprite.png에 있는 동작 10종(76프레임)을 화면 가운데에서 4배로 순서대로 재생한다.
+# 동작마다 5회 반복 -> 마지막 프레임에서 1초 정지 -> 다음 동작, 마지막 동작 뒤에는 처음부터 다시.
+# ESC나 창 닫기 버튼으로 종료한다.
 from pico2d import *
 import pico2d
 import os
@@ -21,6 +25,7 @@ TEXT_COLOR = (20, 20, 60)
 # 동작 목록: (이름, bottom, h, [(left, w, dx), ...])
 # 시트의 한 줄이 한 동작이다. 같은 줄은 bottom과 h가 같고, 프레임마다 (left, w, dx)만 다르다
 # dx: 프레임 가운데와 몸(머리·몸통) 중심의 차이(원본 픽셀). 이만큼 옮겨 그려 몸이 좌우로 흔들리지 않게 한다
+#     달리기 1·2번과 대시는 뻗은 장갑과 다리 잔상 때문에 계산값이 어긋나, 머리 위치를 보고 직접 맞춘 값이다
 ANIMATIONS = [
     ('대기', 447, 39, [(1, 29, 2), (31, 26, 2), (58, 28, 2), (86, 30, 3), (118, 30, 4), (150, 30, 4),
                       (182, 29, 3), (211, 29, 2), (240, 29, 2), (270, 24, 0), (302, 29, -3)]),
@@ -42,7 +47,7 @@ ANIMATIONS = [
 
 running = True
 anim_index = 0                  # 지금 재생 중인 동작 번호
-frame_index = 0
+frame_index = 0                 # 그 동작의 몇 번째 프레임인지
 loop_count = 0                  # 지금까지 끝낸 반복 횟수
 paused = False                  # 5회 반복 뒤 정지 중인지
 pause_start = 0.0               # 정지를 시작한 시각
@@ -101,9 +106,8 @@ def update():
             last_frame_time = now
 
 
-while running:
-    handle_events()
-    update()
+# 화면을 지우고 캐릭터와 상태 글자를 그린 뒤 화면에 보여 준다
+def draw():
     clear_canvas()
     name, bottom, h, frames = ANIMATIONS[anim_index]
     left, w, dx = frames[frame_index]
@@ -118,6 +122,12 @@ while running:
     # 2줄: 지금 프레임 번호와 원본 크기
     font.draw(20, CANVAS_H - 55, '프레임 %d/%d   크기 %dx%d' % (frame_index + 1, len(frames), w, h), TEXT_COLOR)
     update_canvas()
-    delay(0.01)
+
+
+while running:
+    handle_events()
+    update()
+    draw()
+    delay(0.01)     # CPU를 너무 쓰지 않도록 잠깐 쉰다 (재생 속도는 get_time()으로 잰다)
 
 close_canvas()
