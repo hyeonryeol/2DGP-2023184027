@@ -45,6 +45,9 @@ ANIMATIONS = [
     ('포즈', 56, 43, [(6, 34, 1), (49, 34, 1), (96, 23, 0), (125, 23, 0)]),
 ]
 
+# 재생하면서 좌우로 움직이는 동작의 이동 속도(화면 픽셀/초). 여기 없는 동작은 제자리에서 재생한다
+MOVE_SPEED = {'걷기': 100, '가속': 180, '구르기': 300, '달리기': 260, '대시': 400}
+
 running = True
 anim_index = 0                  # 지금 재생 중인 동작 번호
 frame_index = 0                 # 그 동작의 몇 번째 프레임인지
@@ -53,6 +56,7 @@ paused = False                  # 5회 반복 뒤 정지 중인지
 pause_start = 0.0               # 정지를 시작한 시각
 last_frame_time = get_time()    # 마지막으로 프레임을 넘긴 시각
 pos_x = GROUND_X                # 캐릭터 몸 중심 x (제자리 동작은 화면 가운데)
+last_update_time = get_time()   # 마지막으로 update()를 부른 시각 (이동 거리 계산용)
 
 
 # 프레임 하나를 SCALE배로 그린다.
@@ -74,9 +78,11 @@ def handle_events():
 
 # delay()를 쌓아서 재지 않고 실제 경과 시간으로 프레임을 넘긴다
 def update():
-    global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time, pos_x
+    global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time, pos_x, last_update_time
     now = get_time()
-    frames = ANIMATIONS[anim_index][3]
+    dt = now - last_update_time
+    last_update_time = now
+    name, frames = ANIMATIONS[anim_index][0], ANIMATIONS[anim_index][3]
 
     # 정지 중에는 마지막 프레임을 그대로 두고, PAUSE_TIME이 지나면 다음 동작으로 넘어간다
     # 마지막 동작 다음에는 첫 동작으로 돌아간다
@@ -89,6 +95,10 @@ def update():
             last_frame_time = now
             pos_x = GROUND_X        # 새 동작은 화면 가운데에서 시작한다
         return
+
+    # 이동 동작은 프레임이 바뀔 때만이 아니라 매 루프마다 경과 시간만큼 움직여야 끊기지 않는다
+    if name in MOVE_SPEED:
+        pos_x += MOVE_SPEED[name] * dt
 
     if now - last_frame_time >= FRAME_TIME:
         frame_index += 1
