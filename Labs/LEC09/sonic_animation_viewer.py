@@ -14,19 +14,23 @@ open_canvas(CANVAS_W, CANVAS_H)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sonic = load_image(os.path.join(BASE_DIR, 'sonic-sprite.png'))
 
-# 1번 동작(대기): 시트에서 같은 줄이므로 bottom과 h는 같고, 프레임마다 (left, w)만 다르다
+# 1번 동작(대기): 시트에서 같은 줄이므로 bottom과 h는 같고, 프레임마다 (left, w, dx)만 다르다
+# dx: 프레임 가운데와 몸(머리·몸통) 중심의 차이(원본 픽셀). 이만큼 옮겨 그려 몸이 좌우로 흔들리지 않게 한다
 IDLE_BOTTOM, IDLE_H = 447, 39
-IDLE_FRAMES = [(1, 29), (31, 26), (58, 28), (86, 30), (118, 30), (150, 30),
-               (182, 29), (211, 29), (240, 29), (270, 24), (302, 29)]
+IDLE_FRAMES = [(1, 29, 2), (31, 26, 2), (58, 28, 2), (86, 30, 3), (118, 30, 4), (150, 30, 4),
+               (182, 29, 3), (211, 29, 2), (240, 29, 2), (270, 24, 0), (302, 29, -3)]
 
 running = True
 frame_index = 0
 last_frame_time = get_time()    # 마지막으로 프레임을 넘긴 시각
 
 
-# 프레임 하나를 4배로 그린다. 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
-def draw_frame(left, w, bottom, h):
-    sonic.clip_draw(left, bottom, w, h, GROUND_X, GROUND_Y + h * SCALE / 2, w * SCALE, h * SCALE)
+# 프레임 하나를 4배로 그린다.
+# 몸 중심이 GROUND_X에 오도록 dx만큼 옮기고, 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
+def draw_frame(left, w, dx, bottom, h):
+    x = GROUND_X + dx * SCALE
+    y = GROUND_Y + h * SCALE / 2
+    sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
 
 
 def handle_events():
@@ -54,8 +58,8 @@ while running:
     handle_events()
     update()
     clear_canvas()
-    left, w = IDLE_FRAMES[frame_index]
-    draw_frame(left, w, IDLE_BOTTOM, IDLE_H)
+    left, w, dx = IDLE_FRAMES[frame_index]
+    draw_frame(left, w, dx, IDLE_BOTTOM, IDLE_H)
     update_canvas()
     delay(0.01)
 
