@@ -1,4 +1,5 @@
 from pico2d import *
+import pico2d
 import os
 
 CANVAS_W, CANVAS_H = 800, 600
@@ -13,6 +14,9 @@ open_canvas(CANVAS_W, CANVAS_H)
 # 어느 폴더에서 실행해도 이미지를 찾도록 이 파일이 있는 폴더를 기준으로 경로를 만든다
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sonic = load_image(os.path.join(BASE_DIR, 'sonic-sprite.png'))
+# 상태 표시용 글꼴: pico2d에 들어 있는 한글 글꼴을 쓴다
+font = load_font(os.path.join(os.path.dirname(pico2d.__file__), 'data', 'ConsolaMalgun.ttf'), 22)
+TEXT_COLOR = (20, 20, 60)
 
 # 동작 목록: (이름, bottom, h, [(left, w, dx), ...])
 # 시트의 한 줄이 한 동작이다. 같은 줄은 bottom과 h가 같고, 프레임마다 (left, w, dx)만 다르다
@@ -104,6 +108,13 @@ while running:
     name, bottom, h, frames = ANIMATIONS[anim_index]
     left, w, dx = frames[frame_index]
     draw_frame(left, w, dx, bottom, h)
+    # 1줄: 동작 번호와 이름, 지금 몇 번째 반복인지 (loop_count는 끝낸 횟수라 1을 더해 보여 준다)
+    if paused:
+        repeat_text = '반복 %d/%d (정지)' % (REPEAT_COUNT, REPEAT_COUNT)
+    else:
+        repeat_text = '반복 %d/%d' % (loop_count + 1, REPEAT_COUNT)
+    font.draw(20, CANVAS_H - 25, '[%d/%d] %s   %s' % (anim_index + 1, len(ANIMATIONS), name, repeat_text),
+              TEXT_COLOR)
     update_canvas()
     delay(0.01)
 
