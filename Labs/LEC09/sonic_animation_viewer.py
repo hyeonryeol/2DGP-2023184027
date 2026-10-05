@@ -21,6 +21,7 @@ IDLE_FRAMES = [(1, 29), (31, 26), (58, 28), (86, 30), (118, 30), (150, 30),
 
 running = True
 frame_index = 0
+last_frame_time = get_time()    # 마지막으로 프레임을 넘긴 시각
 
 
 # 프레임 하나를 4배로 그린다. 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
@@ -37,8 +38,18 @@ def handle_events():
             running = False
 
 
+# delay()를 쌓아서 재지 않고 실제 경과 시간으로 프레임을 넘긴다
+def update():
+    global frame_index, last_frame_time
+    now = get_time()
+    if now - last_frame_time >= FRAME_TIME:
+        frame_index = (frame_index + 1) % len(IDLE_FRAMES)
+        last_frame_time += FRAME_TIME
+
+
 while running:
     handle_events()
+    update()
     clear_canvas()
     left, w = IDLE_FRAMES[frame_index]
     draw_frame(left, w, IDLE_BOTTOM, IDLE_H)
