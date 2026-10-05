@@ -47,6 +47,7 @@ ANIMATIONS = [
 
 # 재생하면서 좌우로 움직이는 동작의 이동 속도(화면 픽셀/초). 여기 없는 동작은 제자리에서 재생한다
 MOVE_SPEED = {'걷기': 100, '가속': 180, '구르기': 300, '달리기': 260, '대시': 400}
+MOVE_MARGIN = 60    # 몸 중심이 화면 끝에서 이만큼 안쪽에 닿으면 방향을 바꾼다
 
 running = True
 anim_index = 0                  # 지금 재생 중인 동작 번호
@@ -56,15 +57,20 @@ paused = False                  # 5회 반복 뒤 정지 중인지
 pause_start = 0.0               # 정지를 시작한 시각
 last_frame_time = get_time()    # 마지막으로 프레임을 넘긴 시각
 pos_x = GROUND_X                # 캐릭터 몸 중심 x (제자리 동작은 화면 가운데)
+facing = 1                      # 보는 방향: 1 오른쪽, -1 왼쪽 (시트 그림은 모두 오른쪽을 본다)
 last_update_time = get_time()   # 마지막으로 update()를 부른 시각 (이동 거리 계산용)
 
 
 # 프레임 하나를 SCALE배로 그린다.
 # 몸 중심이 pos_x에 오도록 dx만큼 옮기고, 발이 GROUND_Y에 오도록 높이의 절반만큼 올린다
+# 왼쪽을 볼 때는 그림을 좌우로 뒤집으므로 dx도 반대쪽으로 적용한다
 def draw_frame(left, w, dx, bottom, h):
-    x = pos_x + dx * SCALE
+    x = pos_x + dx * SCALE * facing
     y = GROUND_Y + h * SCALE / 2
-    sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
+    if facing == 1:
+        sonic.clip_draw(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
+    else:
+        sonic.clip_composite_draw(left, bottom, w, h, 0, 'h', x, y, w * SCALE, h * SCALE)
 
 
 def handle_events():
@@ -78,7 +84,7 @@ def handle_events():
 
 # delay()를 쌓아서 재지 않고 실제 경과 시간으로 프레임을 넘긴다
 def update():
-    global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time, pos_x, last_update_time
+    global anim_index, frame_index, loop_count, paused, pause_start, last_frame_time, pos_x, facing, last_update_time
     now = get_time()
     dt = now - last_update_time
     last_update_time = now
@@ -93,12 +99,20 @@ def update():
             frame_index = 0
             loop_count = 0
             last_frame_time = now
-            pos_x = GROUND_X        # 새 동작은 화면 가운데에서 시작한다
+            pos_x = GROUND_X        # 새 동작은 화면 가운데에서 오른쪽을 보고 시작한다
+            facing = 1
         return
 
     # 이동 동작은 프레임이 바뀔 때만이 아니라 매 루프마다 경과 시간만큼 움직여야 끊기지 않는다
     if name in MOVE_SPEED:
-        pos_x += MOVE_SPEED[name] * dt
+        pos_x += MOVE_SPEED[name] * dt * facing
+        # 화면 끝 여백에 닿으면 그 자리에서 몸을 돌려 반대쪽으로 간다
+        if pos_x > CANVAS_W - MOVE_MARGIN:
+            pos_x = CANVAS_W - MOVE_MARGIN
+            facing = -1
+        elif pos_x < MOVE_MARGIN:
+            pos_x = MOVE_MARGIN
+            facing = 1
 
     if now - last_frame_time >= FRAME_TIME:
         frame_index += 1
